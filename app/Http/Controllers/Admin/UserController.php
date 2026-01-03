@@ -3,9 +3,45 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    //
+    public function index()
+    {
+        return Inertia::render('Admin/Users/Index', [
+            'users' => User::with('role')->get(),
+        ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Admin/Users/Create', [
+            'roles' => Role::all(),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role_id' => 'required|exists:roles,id',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'User created successfully');
+    }
 }

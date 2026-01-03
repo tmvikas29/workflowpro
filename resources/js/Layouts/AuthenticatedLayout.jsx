@@ -13,8 +13,7 @@ export default function AuthenticatedLayout({ children }) {
     const currentUrl = window.location.pathname;
 
     const navItem = (href, label, Icon) => (
-        <Link
-            href={href}
+        <Link  href={href}
             className={`flex items-center gap-3 px-4 py-2 rounded-lg transition
             ${currentUrl.startsWith(href)  ? 'bg-blue-600 text-white': 'text-gray-300 hover:bg-gray-800 hover:text-white'  }`}
         >
