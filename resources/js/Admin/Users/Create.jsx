@@ -87,8 +87,7 @@ export default function Create({ roles }) {
                         </label>
                         <select
                             className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none
-                                ${errors.role_id ? 'border-red-500' : 'border-gray-300'}`}
-                            value={data.role_id}
+                            ${errors.role_id ? 'border-red-500' : 'border-gray-300'}`} value={data.role_id}
                             onChange={e => setData('role_id', e.target.value)}
                         >
                             <option value="">Select role</option>

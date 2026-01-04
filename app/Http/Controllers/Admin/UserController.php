@@ -13,15 +13,17 @@ class UserController extends Controller
 {
     public function index()
     {
+        $user = User::with('role')->whereHas('role', function ($q) { $q->where('name', '!=', 'admin');})->get();
         return Inertia::render('Admin/Users/Index', [
-            'users' => User::with('role')->get(),
+            'users' => $user,
         ]);
     }
 
     public function create()
     {
+        $roles =Role::where('name', '!=', 'admin')->get();
         return Inertia::render('Admin/Users/Create', [
-            'roles' => Role::all(),
+            'roles' => $roles,
         ]);
     }
 
@@ -39,6 +41,8 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
+
+            //  dd($request->role_id)
         ]);
 
         return redirect()->route('admin.users.index')

@@ -1,30 +1,36 @@
 import { Link, usePage } from '@inertiajs/react';
-import {
-    Home,
-    Users,
-    Settings,
-    LogOut,
-    LayoutDashboard
-} from 'lucide-react';
-
+import { Home, Users, Settings, LogOut, LayoutDashboard} from 'lucide-react';
 export default function AuthenticatedLayout({ children }) {
     const { auth } = usePage().props;
     const role = auth.user?.role?.name;
     const currentUrl = window.location.pathname;
 
-    const navItem = (href, label, Icon) => (
-        <Link  href={href}
+    const isActive = (href, type = 'child') => {
+        if (type === 'parent') {
+            return currentUrl === href;
+        }
+
+        return currentUrl === href || currentUrl.startsWith(href + '/');
+    };
+
+    const navItem = (href, label, Icon, type = 'child') => (
+        <Link
+            href={href}
             className={`flex items-center gap-3 px-4 py-2 rounded-lg transition
-            ${currentUrl.startsWith(href)  ? 'bg-blue-600 text-white': 'text-gray-300 hover:bg-gray-800 hover:text-white'  }`}
+            ${
+                isActive(href, type)
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            }`}
         >
             <Icon size={18} />
             <span>{label}</span>
         </Link>
     );
 
+
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
             <aside className="w-64 bg-gray-900 text-white flex flex-col">
                 <div className="px-5 py-4 border-b border-gray-800">
                     <h1 className="text-xl font-bold tracking-wide">
@@ -33,15 +39,17 @@ export default function AuthenticatedLayout({ children }) {
                 </div>
 
                 <nav className="flex-1 p-3 space-y-1">
-                    {navItem('/dashboard', 'Dashboard', LayoutDashboard)}
+                    {navItem('/dashboard', 'Dashboard', LayoutDashboard, 'parent')}
 
                     {role === 'admin' && (
                         <>
-                            {navItem('/admin', 'Admin Panel', Home)}
+                            {navItem('/admin', 'Admin Panel', Home, 'parent')}
+
                             {navItem('/admin/users', 'Users', Users)}
                         </>
                     )}
                 </nav>
+
                 <div className="border-t border-gray-800 p-4">
                     <div className="text-sm text-gray-300 mb-2">
                         {auth.user.name}

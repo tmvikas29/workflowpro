@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Pages/Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
