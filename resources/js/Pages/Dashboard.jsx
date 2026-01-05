@@ -6,9 +6,6 @@ import UserWidgets from './Dashboard/UserWidgets';
 export default function Dashboard({ stats }) {
     const { auth } = usePage().props;
     const role = auth.user?.role?.name;
-
-    console.log('reole',role)
-
     return (
         <AuthenticatedLayout>
             <div className="mb-6">
