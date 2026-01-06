@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call(RoleSeeder::class);
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'role_id'=> 1
-        ]);
-
+        // $this->call(RoleSeeder::class);
+        // User::factory()->create([
+        //     'name' => 'Admin User',
+        //     'email' => 'admin@example.com',
+        //     'role_id'=> 1
+        // ]);
+        $this->call(UserStatusSeeder::class);
     }
 }

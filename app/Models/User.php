@@ -21,7 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'status',
+        'approved_by',
+        'approved_at',
     ];
 
     /**
@@ -49,5 +52,8 @@ class User extends Authenticatable
 
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+    public function approver(){
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

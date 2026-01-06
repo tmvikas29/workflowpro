@@ -27,33 +27,18 @@ export default function AdminWidgets({ stats }) {
                     </div>
                 </div>
 
-                {/* QUICK ACTIONS */}
                 <div className="bg-white rounded-xl shadow-sm border p-5">
-                    <h3 className="font-semibold text-gray-800 mb-4">
-                        Quick Actions
-                    </h3>
+                    <h3 className="font-semibold text-gray-800 mb-4">  Quick Actions </h3>
 
                     <div className="flex flex-col gap-3">
-                        <ActionButton
-                            href="/admin/users/create"
-                            icon={UserPlus}
-                            label="Create User"
-                            primary
-                        />
-
-                        <ActionButton
-                            href="/admin/users"
-                            icon={Users}
-                            label="Manage Users"
-                        />
+                        <ActionButton href="/admin/users/create" icon={UserPlus} label="Create User"  primary />
+                        <ActionButton href="/admin/users" icon={Users} label="Manage Users"/>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
-/* ===== SMALL COMPONENTS ===== */
 
 function StatCard({ icon: Icon, title, value, color }) {
     const colors = {

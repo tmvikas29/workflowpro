@@ -63,16 +63,23 @@ export default function Index({ users }) {
                                     </span>
                                 </td>
                                 <td className="px-4 py-3 text-right space-x-2">
-                                    {/* <Link
-                                        href={route('admin.users.edit', user.id)}
-                                        className="text-blue-600 hover:underline"
-                                    >
-                                        Edit
-                                    </Link> */}
 
                                     <button className="text-red-600 hover:underline">
                                         Delete
                                     </button>
+                                    {user.status === 1 && (
+                                        <>
+                                            <button onClick={() => approveUser(user.id)}
+                                                className="btn btn-success btn-sm">
+                                                Approve
+                                            </button>
+
+                                            <button onClick={() => rejectUser(user.id)}
+                                                className="btn btn-danger btn-sm ms-2">
+                                                Reject
+                                            </button>
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         ))}

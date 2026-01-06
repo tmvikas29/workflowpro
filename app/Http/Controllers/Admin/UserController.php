@@ -45,7 +45,36 @@ class UserController extends Controller
             //  dd($request->role_id)
         ]);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User created successfully');
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
+
+    public function approve(User $user){
+        if ($user->status !== 'pending') {
+            return back()->with('error', 'User already processed');
+        }
+
+        $user->update([
+            'status'      => 'active',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'User approved successfully');
+    }
+
+    public function reject(User $user){
+        if ($user->status !== 'pending') {
+            return back()->with('error', 'User already processed');
+        }
+
+        $user->update([
+            'status'      => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+
+        return back()->with('success', 'User rejected');
+    }
+
+
 }
