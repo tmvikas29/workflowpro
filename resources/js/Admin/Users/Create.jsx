@@ -82,14 +82,9 @@ export default function Create({ roles }) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Role
-                        </label>
-                        <select
-                            className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none
-                            ${errors.role_id ? 'border-red-500' : 'border-gray-300'}`} value={data.role_id}
-                            onChange={e => setData('role_id', e.target.value)}
-                        >
+                        <label className="block text-sm font-medium text-gray-700"> Role</label>
+                        <select className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none
+                            ${errors.role_id ? 'border-red-500' : 'border-gray-300'}`} value={data.role_id} onChange={e => setData('role_id', e.target.value)} >
                             <option value="">Select role</option>
                             {roles.map(role => (
                                 <option key={role.id} value={role.id}>
@@ -102,20 +97,9 @@ export default function Create({ roles }) {
                         )}
                     </div>
                     <div className="flex justify-end gap-3 pt-4 border-t">
-                        <Link
-                            href={route('admin.users.index')}
-                            className="px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100"
-                        >
-                            Cancel
-                        </Link>
+                        <Link href={route('admin.users.index')} className="px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100"> Cancel </Link>
 
-                        <button
-                            type="submit"
-                            disabled={processing}
-                            className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
-                        >
-                            Create User
-                        </button>
+                        <button type="submit" disabled={processing} className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60" > Create User </button>
                     </div>
                 </form>
             </div>
