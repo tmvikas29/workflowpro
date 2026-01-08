@@ -1,5 +1,6 @@
 import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Toast from '@/Utilities/toast';
 
 export default function Create({ roles }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -9,10 +10,20 @@ export default function Create({ roles }) {
         role_id: '',
     });
 
-    const submit = (e) => {
-        e.preventDefault();
-        post(route('admin.users.store'));
-    };
+   const submit = (e) => {
+    e.preventDefault();
+
+    post(route("admin.users.store"), {
+        onSuccess: () => {
+            Toast.success("User created successfully");
+            reset();
+        },
+        onError: () => {
+            Toast.error("Please fix the errors");
+        }
+    });
+};
+
 
     return (
         <AuthenticatedLayout>

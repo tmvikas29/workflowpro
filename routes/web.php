@@ -27,6 +27,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+    Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
+
 });
 
 

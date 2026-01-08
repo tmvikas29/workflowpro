@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -49,13 +50,13 @@ class UserController extends Controller
     }
 
     public function approve(User $user){
-        if ($user->status !== 'pending') {
-            return back()->with('error', 'User already processed');
+        if ($user->status !== 1) {
+            return back()->withErrors(['status' => 'User already processed']);
         }
 
         $user->update([
-            'status'      => 'active',
-            'approved_by' => auth()->id(),
+            'status' => 2,
+            'approved_by' => Auth::id(),
             'approved_at' => now(),
         ]);
 
@@ -63,17 +64,17 @@ class UserController extends Controller
     }
 
     public function reject(User $user){
-        if ($user->status !== 'pending') {
-            return back()->with('error', 'User already processed');
+        if ($user->status !== 1) {
+            return back()->withErrors(['status' => 'User already processed']);
         }
 
         $user->update([
-            'status'      => 'rejected',
-            'approved_by' => auth()->id(),
+            'status' => 3,
+            'approved_by' => Auth::id(),
             'approved_at' => now(),
         ]);
 
-        return back()->with('success', 'User rejected');
+        return back()->with('success', 'User rejected successfully');
     }
 
 

@@ -1,8 +1,38 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Toast from '@/Utilities/toast';
 
 export default function Index({ users }) {
-    console.log('usrs',users)
+    const status_map = {
+        1: { label: "Pending", class: "bg-yellow-100 text-yellow-800", },
+        2: { label: "Approved", class: "bg-green-100 text-green-800", },
+        3: { label: "Rejected", class: "bg-red-100 text-red-800", },
+    };
+
+    const approveUser = (id) => {
+        router.post(route('users.approve', id), {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                Toast.success("User approved successfully");
+            },
+            onError: () => {
+                Toast.error("Failed to approve user");
+            }
+        });
+    };
+
+    const rejectUser = (id) => {
+        router.post(route('users.reject', id), {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                Toast.warning("User rejected");
+            },
+            onError: () => {
+                Toast.error("Failed to reject user");
+            }
+        });
+    };
+
     return (
         <AuthenticatedLayout>
             <div className="flex items-center justify-between mb-6">
@@ -39,14 +69,24 @@ export default function Index({ users }) {
                                     <span className="inline-flex px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">{user.role?.name} </span>
                                 </td>
                                 <td className="px-4 py-3 text-right space-x-2">
-                                    <button className="text-red-600 hover:underline">Delete</button>
                                     {user.status === 1 && (
                                         <>
-                                            <button onClick={() => approveUser(user.id)} className="btn btn-success btn-sm"> Approve</button>
-                                            <button onClick={() => rejectUser(user.id)} className="btn btn-danger btn-sm ms-2"> Reject</button>
+                                            <button onClick={() => approveUser(user.id)} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded-md hover:bg-green-700" >
+                                                Approve
+                                            </button>
+
+                                            <button onClick={() => rejectUser(user.id)} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 ml-2" >
+                                                Reject
+                                            </button>
                                         </>
                                     )}
+                                    {user.status !== 1 && (
+                                        <span
+                                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${status_map[user.status]?.class  }`} > {status_map[user.status]?.label}
+                                        </span>
+                                    )}
                                 </td>
+
                             </tr>
                         ))}
                     </tbody>
