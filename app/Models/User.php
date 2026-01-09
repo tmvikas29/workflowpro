@@ -53,7 +53,20 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo(Role::class);
     }
+
     public function approver(){
         return $this->belongsTo(User::class, 'approved_by');
     }
+    public function permissions(){
+        return $this->belongsToMany(Permission::class, 'user_permission');
+    }
+
+    public function hasPermission(string $permission): bool{
+        if ($this->role && $this->role->name === 'admin') {
+            return true;
+        }
+
+        return $this->permissions->contains('name', $permission);
+    }
+
 }

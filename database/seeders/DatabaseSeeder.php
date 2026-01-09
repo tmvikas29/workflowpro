@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,12 +19,17 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // $this->call(RoleSeeder::class);
-        // User::factory()->create([
-        //     'name' => 'Admin User',
-        //     'email' => 'admin@example.com',
-        //     'role_id'=> 1
-        // ]);
+        $this->call(RoleSeeder::class);
         $this->call(UserStatusSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $admin = User::create([
+            'name'     => 'Admin User',
+            'email'    => 'admin@example.com',
+            'password' => Hash::make('admin'),
+            'role_id'  => 1,
+            'status'   => 2,
+        ]);
+        $allPermissionIds = Permission::pluck('id');
+        $admin->permissions()->sync($allPermissionIds);
     }
 }
