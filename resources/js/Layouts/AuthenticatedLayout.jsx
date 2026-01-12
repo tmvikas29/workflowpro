@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Home, Users, Settings, LogOut, LayoutDashboard} from 'lucide-react';
+import { Home, Users, Settings, LogOut, LayoutDashboard, PlusCircle} from 'lucide-react';
 export default function AuthenticatedLayout({ children }) {
     const { auth } = usePage().props;
     const role = auth.user?.role?.name;
@@ -46,6 +46,8 @@ export default function AuthenticatedLayout({ children }) {
                             {navItem('/admin', 'Admin Panel', Home, 'parent')}
 
                             {navItem('/admin/users', 'Users', Users)}
+
+                            {navItem('/admin/roles/create','Create Roles', PlusCircle)}
                         </>
                     )}
                 </nav>

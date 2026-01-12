@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return Inertia::render('Pages/Welcome', [
@@ -29,6 +30,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
     Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
 
 });
 

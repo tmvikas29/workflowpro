@@ -2,27 +2,34 @@ import { useForm, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Toast from '@/Utilities/toast';
 
-export default function Create({ roles }) {
-    const { data, setData, post, processing, errors } = useForm({
+export default function Create({ roles, permissions }) {
+    const { data, setData, post, processing, errors ,reset} = useForm({
         name: '',
         email: '',
         password: '',
         role_id: '',
+        permissions: [],
     });
+
+    const selectedRole = roles.find(r => r.id == data.role_id);
+
+    const togglePermission = (id) => {
+        setData('permissions', data.permissions.includes(id) ? data.permissions.filter(p => p !== id) : [...data.permissions, id]);
+    };
 
    const submit = (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    post(route("admin.users.store"), {
-        onSuccess: () => {
-            Toast.success("User created successfully");
-            reset();
-        },
-        onError: () => {
-            Toast.error("Please fix the errors");
-        }
-    });
-};
+        post(route("admin.users.store"), {
+            onSuccess: () => {
+                Toast.success("User created successfully");
+                reset();
+            },
+            onError: () => {
+                Toast.error("Please fix the errors");
+            }
+        });
+    };
 
 
     return (
@@ -74,19 +81,11 @@ export default function Create({ roles }) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Password
-                        </label>
-                        <input
-                            type="password"
+                        <label className="block text-sm font-medium text-gray-700"> Password</label>
+                        <input type="password"
                             className={`mt-1 w-full rounded-lg border px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none
-                                ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
-                            value={data.password}
-                            onChange={e => setData('password', e.target.value)}
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                            Minimum 6 characters
-                        </p>
+                            ${errors.password ? 'border-red-500' : 'border-gray-300'}`} value={data.password} onChange={e => setData('password', e.target.value)}/>
+                        <p className="text-xs text-gray-500 mt-1"> Minimum 6 characters </p>
                         {errors.password && (
                             <p className="text-sm text-red-500 mt-1">{errors.password}</p>
                         )}
@@ -107,6 +106,22 @@ export default function Create({ roles }) {
                             <p className="text-sm text-red-500 mt-1">{errors.role_id}</p>
                         )}
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2"> Permissions</label>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {permissions.map(permission => (
+                                <label key={permission.id} className={`flex items-center space-x-2 text-sm $`} >
+                                    <input type="checkbox"  checked={data.permissions.includes(permission.id)} onChange={() => togglePermission(permission.id)} className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"/>
+                                    <span>{permission.label}</span>
+                                </label>
+                            ))}
+                        </div>
+
+                        {errors.permissions && (
+                            <p className="text-sm text-red-500 mt-1">{errors.permissions}</p>
+                        )}
+                    </div>
+
                     <div className="flex justify-end gap-3 pt-4 border-t">
                         <Link href={route('admin.users.index')} className="px-4 py-2 rounded-lg border text-gray-700 hover:bg-gray-100"> Cancel </Link>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Permission;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -23,8 +24,10 @@ class UserController extends Controller
     public function create()
     {
         $roles =Role::where('name', '!=', 'admin')->get();
+        $permissions = Permission::get();
         return Inertia::render('Admin/Users/Create', [
             'roles' => $roles,
+            'permissions'=>$permissions
         ]);
     }
 
@@ -35,16 +38,21 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role_id' => 'required|exists:roles,id',
+            'permissions' => 'array'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
-
-            //  dd($request->role_id)
         ]);
+
+        $role = Role::find($request->role_id);
+
+        if ($role && $role->name !== 'admin') {
+            $user->permissions()->sync($request->permissions ?? []);
+        }
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully');
     }
