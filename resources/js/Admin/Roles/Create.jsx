@@ -20,7 +20,7 @@ export default function Create({ permissions }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('admin.roles.store'), {
+        post(route('roles.store'), {
             onSuccess: () => Toast.success('Role created successfully'),
             onError: () => Toast.error('Please fix errors'),
         });

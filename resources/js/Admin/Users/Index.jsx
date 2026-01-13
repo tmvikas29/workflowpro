@@ -40,7 +40,7 @@ export default function Index({ users }) {
                     <h1 className="text-2xl font-semibold text-gray-800">Users</h1>
                     <p className="text-sm text-gray-500"> Manage application users and roles </p>
                 </div>
-                <Link href={route('admin.users.create')} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" >+ Create User</Link>
+                <Link href={route('users.create')} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700" >+ Create User</Link>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
