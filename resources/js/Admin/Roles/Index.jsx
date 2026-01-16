@@ -1,7 +1,33 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Swal from 'sweetalert2';
+import Toast from '@/Utilities/toast';
 
 export default function Index({ roles }) {
+    const deleteRole = (roleId) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This role will be permanently deleted.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, delete it',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(route('roles.destroy', roleId), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        Toast.success('Role deleted successfully');
+                    },
+                    onError: (errors) => {
+                       Toast.error('Role Cannot be Deleted, It Is Assigned to user ');
+                    },
+                });
+            }
+        });
+    };
+
     return (
         <AuthenticatedLayout>
             <div className="flex items-center justify-between mb-6">
@@ -50,15 +76,15 @@ export default function Index({ roles }) {
                                 </td>
 
                                 <td className="px-4 py-3 text-right space-x-2">
-                                    {/* <Link href={route('admin.roles.edit', role.id)} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200"  >
+                                    <Link href={route('roles.edit', role.id)} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200"  >
                                         Edit
-                                    </Link> */}
+                                    </Link>
 
-                                    {/*
-                                    <button className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200">
+
+                                    <button onClick={() => deleteRole(role.id)} className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-700 bg-red-100 rounded-md hover:bg-red-200">
                                         Delete
                                     </button>
-                                    */}
+
                                 </td>
                             </tr>
                         ))}

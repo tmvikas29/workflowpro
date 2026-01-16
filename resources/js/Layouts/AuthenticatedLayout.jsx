@@ -47,7 +47,7 @@ export default function AuthenticatedLayout({ children }) {
 
                             {navItem('/admin/users', 'Users', Users)}
 
-                            {navItem('/admin/roles/create','Create Roles', PlusCircle)}
+                            {navItem('/admin/roles','Roles', PlusCircle)}
                         </>
                     )}
                 </nav>

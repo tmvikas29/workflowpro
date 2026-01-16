@@ -59,4 +59,18 @@ class RoleController extends Controller
 
         return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully');
     }
+
+    public function destroy(Role $role){
+        // agr role ssignes hai toh error
+        if ($role->users()->count() > 0) {
+            return back()->withErrors([
+                'role' => 'This role is assigned to users and cannot be deleted.'
+            ]);
+        }
+        // permisiion remove
+        $role->permissions()->detach();
+        $role->delete();
+
+        return back()->with('success', 'Role deleted successfully');
+    }
 }
