@@ -26,8 +26,8 @@ Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'ind
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])  ->name('admin.dashboard');
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::post('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
     Route::post('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');

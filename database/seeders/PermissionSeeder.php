@@ -16,6 +16,10 @@ class PermissionSeeder extends Seeder
             ['name' => 'approve_users', 'label' => 'Approve Users'],
             ['name' => 'reject_users', 'label' => 'Reject Users'],
             ['name' => 'delete_users', 'label' => 'Delete Users'],
+            ['name' => 'view_dashboard', 'label' => 'View Dashboard'],
+            ['name' => 'view_activity_logs', 'label' => 'View Activity Logs'],
+            ['name' => 'manage_roles', 'label' => 'Manage Roles'],
+            ['name' => 'assign_permissions', 'label' => 'Assign Permissions'],
         ];
 
         foreach ($permissions as $permission) {

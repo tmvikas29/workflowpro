@@ -1,27 +1,19 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { usePage } from '@inertiajs/react';
-import AdminWidgets from './Dashboard/AdminWidgets';
-import UserWidgets from './Dashboard/UserWidgets';
+import DashboardWidgets from './Dashboard/Widgets/DashboardWidgets';
 
-export default function Dashboard({ stats }) {
-    const { auth } = usePage().props;
-    const role = auth.user?.role?.name;
+export default function Dashboard({ stats ,permissions}) {
+    console.log('stats',stats)
     return (
         <AuthenticatedLayout>
-            <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-gray-800">
-                    {role === 'admin' ? 'Admin Dashboard' : 'Dashboard'}
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">
+                    Dashboard
                 </h1>
-
-                <p className="text-sm text-gray-500">
-                    {role === 'admin' ? 'System overview and administration' : 'Your account overview'}
+                <p className="text-gray-500 mt-1">
+                    Monitor users, roles and system activity
                 </p>
             </div>
-            {role === 'admin' ? (
-                <AdminWidgets stats={stats} />
-            ) : (
-                <UserWidgets />
-            )}
+            <DashboardWidgets stats={stats} permissions={permissions} />
         </AuthenticatedLayout>
     );
 }
