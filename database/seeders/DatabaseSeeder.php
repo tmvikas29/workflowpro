@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,21 +16,31 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // User::factory(10)->create();
-
-        $this->call(RoleSeeder::class);
-        $this->call(UserStatusSeeder::class);
-        $this->call(PermissionSeeder::class);
-        $admin = User::create([
-            'name'     => 'Admin User',
-            'email'    => 'admin@example.com',
-            'password' => Hash::make('admin'),
-            'role_id'  => 1,
-            'status'   => 2,
+    public function run(): void{
+        $this->call([
+            RoleSeeder::class,
+            UserStatusSeeder::class,
+            PermissionSeeder::class,
         ]);
-        $allPermissionIds = Permission::pluck('id');
-        $admin->permissions()->sync($allPermissionIds);
+
+        // Create admin user
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name'     => 'Admin User',
+                'password' => Hash::make('admin'),
+                'role_id'  => Role::where('name', 'admin')->value('id'),
+                'status'   => 2,
+            ]
+        );
+
+        // 🔑 Give ALL permissions to admin ROLE
+        $adminRole = Role::where('name', 'admin')->first();
+
+        if ($adminRole) {
+            $adminRole->permissions()->sync(
+                Permission::pluck('id')->toArray()
+            );
+        }
     }
 }

@@ -1,9 +1,11 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Home, Users, Settings, LogOut, LayoutDashboard, PlusCircle} from 'lucide-react';
 export default function AuthenticatedLayout({ children }) {
-    const { auth } = usePage().props;
-    const role = auth.user?.role?.name;
+    const { auth, permissions } = usePage().props;
     const currentUrl = window.location.pathname;
+
+    const can = (perm) => permissions.includes(perm);
+
 
     const isActive = (href, type = 'child') => {
         if (type === 'parent') {
@@ -39,18 +41,21 @@ export default function AuthenticatedLayout({ children }) {
                 </div>
 
                 <nav className="flex-1 p-3 space-y-1">
-                    {navItem('/dashboard', 'Dashboard', LayoutDashboard, 'parent')}
 
-                    {role === 'admin' && (
-                        <>
-                            {navItem('/admin', 'Admin Panel', Home, 'parent')}
+                    {can('view_dashboard') &&
+                        navItem('/dashboard', 'Dashboard', LayoutDashboard, 'parent')
+                    }
 
-                            {navItem('/admin/users', 'Users', Users)}
+                    {can('view_users') &&
+                        navItem('/admin/users', 'Users', Users)
+                    }
 
-                            {navItem('/admin/roles','Roles', PlusCircle)}
-                        </>
-                    )}
+                    {can('manage_roles') &&
+                        navItem('/admin/roles', 'Roles', PlusCircle)
+                    }
+
                 </nav>
+
 
                 <div className="border-t border-gray-800 p-4">
                     <div className="text-sm text-gray-300 mb-2">
